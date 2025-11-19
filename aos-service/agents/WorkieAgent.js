@@ -44,12 +44,12 @@ class WorkieAgent {
       });
 
       const prompt = `
-You are Workie, a Freelancer Admin Agent. Your goal is to help manage administrative tasks with a friendly, competent tone.
+You are Workie, a Freelancer Admin Agent. Your goal is to help manage administrative tasks with a friendly, competent tone (aligned with workie_vision_values.md).
 
 Analyze the following transcript text and perform three actions:
 1. Summarize the transcript into 3 key decisions made.
-2. Extract and list all specific action items with assigned owners.
-3. Write a professional, concise follow-up email draft based on the summary and action items. Use a friendly competence tone.
+2. Extract and list all specific action items with assigned owners (if mentioned).
+3. Write a professional, concise follow-up email draft based on the summary and action items, addressed to the client. Use a friendly competence tone.
 
 TRANSCRIPT:
 ${transcriptText}
@@ -59,7 +59,7 @@ ${transcriptText}
       const response = await result.response;
       const text = response.text();
       
-      // Log usage if available (Mocking usage logging as SDK might vary in how it exposes it directly in response object depending on version)
+      // Log usage if available
       if (response.usageMetadata) {
           console.log(`[WorkieAgent] Token Usage - Prompt: ${response.usageMetadata.promptTokenCount}, Candidates: ${response.usageMetadata.candidatesTokenCount}, Total: ${response.usageMetadata.totalTokenCount}`);
       } else {
@@ -68,7 +68,6 @@ ${transcriptText}
 
       console.log('[WorkieAgent] Task execution completed successfully.');
 
-      // Parse JSON just in case, though response.text() should be JSON string
       return JSON.parse(text);
 
     } catch (error) {
@@ -79,4 +78,3 @@ ${transcriptText}
 }
 
 module.exports = new WorkieAgent();
-
