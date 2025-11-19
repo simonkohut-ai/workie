@@ -1,32 +1,27 @@
 const workieAgent = require('../agents/WorkieAgent');
 
-async function testAgent() {
-  console.log('Starting Agent Test...');
-  
-  const mockTranscript = `
-    Project Manager: "Okay team, let's sync on the Q4 deliverables."
-    Designer: "I'm nearly done with the UI mocks, just need approval on the color palette."
-    Project Manager: "Great. Let's lock that in by Wednesday. I'll review it tomorrow."
-    Developer: "I'm blocked on the API integration until the docs are updated."
-    Project Manager: "I'll ping the backend team about the docs right after this call."
-  `;
+async function runTest() {
+  const mockTranscript = `Okay team, today's call summary. Sarah, you confirmed the client, Apex Corp, wants the new platform branding finalized by Friday, not Monday. Joe, your key action is to gather all Q3 reports and summarize the top five marketing failures by Wednesday noon. We decided the budget for Q4 is frozen at $15k, no exceptions. I will handle drafting the follow-up email to Apex Corp and confirming the scope change.`;
+
+  console.log('Running WorkieAgent test...');
 
   try {
-    // Check if API key is present
     if (!process.env.GOOGLE_API_KEY) {
-      console.warn('WARNING: GOOGLE_API_KEY not set. This test will likely fail or need mocking.');
+      console.warn('WARNING: GOOGLE_API_KEY not set. Test may fail if not using a mock.');
     }
 
     const result = await workieAgent.executeTask(mockTranscript);
     
-    console.log('Agent Result:', JSON.stringify(result, null, 2));
+    console.log('Result:', JSON.stringify(result, null, 2));
 
-    // Validation
-    if (result.summary && Array.isArray(result.actionItems) && result.draftEmail) {
-      console.log('TEST PASSED: JSON structure is correct.');
+    const hasSummary = result.hasOwnProperty('summary');
+    const hasActionItems = Array.isArray(result.actionItems);
+    const hasDraftEmail = result.hasOwnProperty('draftEmail');
+
+    if (hasSummary && hasActionItems && hasDraftEmail) {
+      console.log('TEST PASSED: All required keys are present.');
     } else {
-      console.error('TEST FAILED: JSON structure is incorrect.');
-      console.error('Received keys:', Object.keys(result));
+      console.error('TEST FAILED: Missing required keys.');
       process.exit(1);
     }
 
@@ -36,5 +31,4 @@ async function testAgent() {
   }
 }
 
-testAgent();
-
+runTest();

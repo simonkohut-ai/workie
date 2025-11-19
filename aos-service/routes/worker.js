@@ -8,9 +8,10 @@ const workieAgent = require('../agents/WorkieAgent');
 const db = admin.firestore();
 
 // Helper function to trigger agent run
-async function triggerInitialAgentRun(config) {
+async function triggerInitialAgentRun(workerConfig) {
+  const mockTranscript = `Okay team, today's call summary. Sarah, you confirmed the client, Apex Corp, wants the new platform branding finalized by Friday, not Monday. Joe, your key action is to gather all Q3 reports and summarize the top five marketing failures by Wednesday noon. We decided the budget for Q4 is frozen at $15k, no exceptions. I will handle drafting the follow-up email to Apex Corp and confirming the scope change.`;
+  
   console.log('[Config Route] Triggering initial agent run...');
-  const mockTranscript = "Client: I need the new logo by Friday. Developer: I can do that, but I need the high-res assets. Client: I'll send them tonight. Developer: Okay, I'll start tomorrow.";
   
   try {
     // We are using the singleton workieAgent. 
@@ -43,16 +44,12 @@ router.post('/config', authMiddleware, async (req, res) => {
 
     console.log(`[Config Route] Successfully saved config to ${docPath}`);
 
-    // Trigger initial agent run (Placeholder, will be integrated in next steps)
-    // await triggerInitialAgentRun(workerConfig); 
+    // Trigger initial agent run
+    triggerInitialAgentRun(workerConfig); 
 
     res.status(200).json({ message: 'Configuration saved successfully', path: docPath });
 
   } catch (error) {
-    console.error('[Config Route] Error saving config:', error);
-    res.status(500).json({ error: 'Internal Server Error', details: error.message });
-  }
-});
     console.error('[Config Route] Error saving config:', error);
     res.status(500).json({ error: 'Internal Server Error', details: error.message });
   }
