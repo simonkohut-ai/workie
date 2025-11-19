@@ -25,11 +25,12 @@ async function triggerInitialAgentRun(config) {
 // POST /api/config
 router.post('/config', authMiddleware, async (req, res) => {
   try {
-    const { appId, config } = req.body;
+    const { workerConfig } = req.body;
     const userId = req.user.userId;
+    const appId = 'workie-app-id'; // Placeholder app ID
 
-    if (!appId || !config) {
-      return res.status(400).json({ error: 'Missing appId or config in request body' });
+    if (!workerConfig) {
+      return res.status(400).json({ error: 'Missing workerConfig in request body' });
     }
 
     console.log(`[Config Route] Received config for user: ${userId}, app: ${appId}`);
@@ -37,20 +38,21 @@ router.post('/config', authMiddleware, async (req, res) => {
     // Path: /artifacts/{appId}/users/{userId}/agentConfigs/mainWorker
     const docPath = `artifacts/${appId}/users/${userId}/agentConfigs/mainWorker`;
     
-    await db.doc(docPath).set(config, { merge: true });
+    // Save workerConfig directly as the document data
+    await db.doc(docPath).set(workerConfig, { merge: true });
 
     console.log(`[Config Route] Successfully saved config to ${docPath}`);
 
-    // Trigger initial agent run
-    // We don't await this so the response is fast, or we can await if we want to confirm it started.
-    // The directive implies "immediately call", usually implies async or part of flow.
-    // Given it's a "verify the setup" step, awaiting it might be better for debugging, 
-    // but for production usually we'd enqueue it. I'll await it for now to ensure logging happens visibly.
-    await triggerInitialAgentRun(config); 
+    // Trigger initial agent run (Placeholder, will be integrated in next steps)
+    // await triggerInitialAgentRun(workerConfig); 
 
     res.status(200).json({ message: 'Configuration saved successfully', path: docPath });
 
   } catch (error) {
+    console.error('[Config Route] Error saving config:', error);
+    res.status(500).json({ error: 'Internal Server Error', details: error.message });
+  }
+});
     console.error('[Config Route] Error saving config:', error);
     res.status(500).json({ error: 'Internal Server Error', details: error.message });
   }
