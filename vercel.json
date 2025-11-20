@@ -1,19 +1,10 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "aos-service/server.js",
-      "use": "@vercel/node",
-      "config": { "includeFiles": ["aos-service/**"] }
-    },
-    {
-      "src": "client/package.json",
-      "use": "@vercel/static-build",
-      "config": { "distDir": "dist" }
-    }
-  ],
+  "buildCommand": "cd client && npm install && npm run build",
+  "outputDirectory": "client/dist",
+  "devCommand": "cd client && npm run dev",
+  "installCommand": "npm install --prefix client && npm install --prefix aos-service",
+  "framework": null,
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "/aos-service/server.js" },
-    { "source": "/(.*)", "destination": "/client/$1" }
+    { "source": "/api/(.*)", "destination": "/aos-service/server.js" }
   ]
 }
