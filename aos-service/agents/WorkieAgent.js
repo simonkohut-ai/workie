@@ -9,7 +9,8 @@ class WorkieAgent {
     // Initialize Google GenAI
     const apiKey = process.env.GOOGLE_API_KEY;
     if (!apiKey) {
-      console.warn('GOOGLE_API_KEY is not set in environment variables.');
+      console.error('CRITICAL ERROR: GOOGLE_API_KEY is missing in environment variables.');
+      throw new Error('Server Configuration Error: Missing Gemini API Key');
     }
     this.genAI = new GoogleGenerativeAI(apiKey);
     this.modelName = 'gemini-2.5-flash-preview-09-2025';

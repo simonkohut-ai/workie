@@ -45,13 +45,19 @@ router.post('/config', authMiddleware, async (req, res) => {
     console.log(`[Config Route] Successfully saved config to ${docPath}`);
 
     // Trigger initial agent run
-    triggerInitialAgentRun(workerConfig, userId); 
+    // We await here to ensure we catch any immediate errors from the agent startup
+    // although typical agent execution might be backgrounded in a real queue system.
+    // For this synchronous feedback loop:
+    await triggerInitialAgentRun(workerConfig, userId); 
 
     res.status(200).json({ message: 'Configuration saved successfully', path: docPath });
 
   } catch (error) {
-    console.error('[Config Route] Error saving config:', error);
-    res.status(500).json({ error: 'Internal Server Error', details: error.message });
+    console.error('[Config Route] CRITICAL ERROR:', error);
+    res.status(500).json({ 
+      message: 'Server Error: Check API Keys and Firestore Credentials.',
+      details: error.message 
+    });
   }
 });
 
