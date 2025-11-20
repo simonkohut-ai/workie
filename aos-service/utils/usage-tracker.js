@@ -15,11 +15,14 @@ async function getUsage(userId) {
   const doc = await docRef.get();
 
   if (!doc.exists) {
+    console.log(`[UsageTracker] Initializing tracking for user ${userId}`);
     const defaultPayload = {
       currentUsage: 0,
       monthlyQuota: 50000,
       lastReset: Date.now()
     };
+    // Use set() with merge: true to be safe, although if it doesn't exist, merge is redundant but safe.
+    // Critical: Initialize immediately.
     await docRef.set(defaultPayload);
     return defaultPayload;
   }
