@@ -3,9 +3,6 @@ import React, { useState } from 'react';
 // Placeholder for Billing Component
 const BillingComponent = () => {
   const handleManageSubscription = async () => {
-    // In a real implementation, this would call a backend endpoint
-    // to create a Stripe Customer Portal session and redirect the user.
-    // Example: window.location.href = '/api/stripe/create-portal-session';
     alert("Redirecting to Stripe Customer Portal... (Integration Pending)");
   };
 
@@ -33,20 +30,15 @@ const BillingComponent = () => {
 export default function WorkieApp() {
   const [status, setStatus] = useState('');
   const [loading, setLoading] = useState(false);
-  const [demoMode, setDemoMode] = useState(true); // Default to Demo Mode
+  const [agentResult, setAgentResult] = useState(null);
+
+  // Demo Mode Configuration
+  const DEMO_MODE = true; 
 
   const saveConfiguration = async () => {
     setLoading(true);
-    setStatus('Processing...');
-
-    if (demoMode) {
-        // SIMULATED BACKEND RESPONSE
-        setTimeout(() => {
-            setLoading(false);
-            setStatus('Success: Configuration saved. Agent output: Summary: 3 decisions made. Action Items: 2 tasks assigned. Email draft created.');
-        }, 2000);
-        return;
-    }
+    setStatus('Updating Workie...');
+    setAgentResult(null);
 
     // Configuration payload
     const workerConfig = {
@@ -58,7 +50,25 @@ export default function WorkieApp() {
       }
     };
 
-    // Use relative path for Vercel deployment
+    if (DEMO_MODE) {
+      // Simulate API delay
+      setTimeout(() => {
+        setLoading(false);
+        setStatus('Success: Agent Configured & Deployed (Demo Mode)');
+        setAgentResult({
+          summary: "The client, Apex Corp, needs the new platform branding finalized by Friday. Q4 budget is frozen at $15k.",
+          actionItems: [
+            "Finalize platform branding by Friday (Sarah)",
+            "Gather Q3 reports and summarize failures by Wednesday (Joe)",
+            "Draft follow-up email to Apex Corp (Manager)"
+          ],
+          draftEmail: "Hi Team,\n\nJust a quick recap: we're locking in the branding for Apex Corp by Friday. Joe, please have those Q3 reports ready by Wednesday. Also, note the Q4 budget freeze at $15k.\n\nLet's crush it!\n\nBest,\nWorkie"
+        });
+      }, 2000);
+      return;
+    }
+
+    // Real API Call (Use relative path for Vercel deployment)
     const aosEndpoint = '/api/config';
 
     try {
@@ -66,7 +76,7 @@ export default function WorkieApp() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-user-id': 'test-user-frontend' // Simulating auth
+          'x-user-id': 'test-user-frontend'
         },
         body: JSON.stringify({ workerConfig })
       });
@@ -76,36 +86,24 @@ export default function WorkieApp() {
         setStatus(`Success: ${data.message}`);
       } else {
         const errorData = await response.json();
-        setStatus(`Error: ${errorData.error}`);
+        setStatus(`Error: ${errorData.error || errorData.message}`);
       }
     } catch (error) {
       console.error('Fetch error:', error);
       setStatus(`Network Error: ${error.message}`);
     } finally {
-      setLoading(false);
+      if (!DEMO_MODE) setLoading(false);
     }
   };
 
   return (
-    <div style={{ padding: '20px', fontFamily: 'sans-serif' }}>
+    <div style={{ padding: '20px', fontFamily: 'sans-serif', maxWidth: '600px', margin: '0 auto' }}>
       <h1>Workie Admin</h1>
       <p>Manage your Freelancer Admin Agent</p>
       
-      <div style={{ border: '1px solid #ccc', padding: '20px', borderRadius: '8px', maxWidth: '400px', marginBottom: '20px' }}>
+      <div style={{ border: '1px solid #ccc', padding: '20px', borderRadius: '8px', marginBottom: '20px' }}>
         <h2>Agent Configuration</h2>
-        
-        <div style={{ marginBottom: '15px' }}>
-            <label>
-                <input 
-                    type="checkbox" 
-                    checked={demoMode} 
-                    onChange={(e) => setDemoMode(e.target.checked)} 
-                />
-                {' '}Enable Demo Mode (Bypass Backend)
-            </label>
-        </div>
-
-        <p>Status: {loading ? 'Processing...' : 'Idle'}</p>
+        <p>Status: <strong>{loading ? 'Processing...' : (status || 'Idle')}</strong></p>
         
         <button 
           onClick={saveConfiguration}
@@ -116,15 +114,34 @@ export default function WorkieApp() {
             color: 'white',
             border: 'none',
             borderRadius: '4px',
-            cursor: loading ? 'not-allowed' : 'pointer'
+            cursor: loading ? 'not-allowed' : 'pointer',
+            fontSize: '16px'
           }}
         >
-          {loading ? 'Saving...' : 'Save & Test Agent'}
+          {loading ? 'Deploying...' : 'Save Configuration & Deploy Agent'}
         </button>
 
-        {status && (
-          <div style={{ marginTop: '20px', padding: '10px', backgroundColor: '#f0f0f0', borderRadius: '4px' }}>
-            <strong>Log:</strong> {status}
+        {agentResult && (
+          <div style={{ marginTop: '20px', padding: '15px', backgroundColor: '#f9f9f9', borderRadius: '8px', border: '1px solid #eee' }}>
+            <h3 style={{ marginTop: 0 }}>Agent Output (Demo)</h3>
+            <div style={{ marginBottom: '10px' }}>
+              <strong>Summary:</strong>
+              <p>{agentResult.summary}</p>
+            </div>
+            <div style={{ marginBottom: '10px' }}>
+              <strong>Action Items:</strong>
+              <ul>
+                {agentResult.actionItems.map((item, idx) => (
+                  <li key={idx}>{item}</li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <strong>Draft Email:</strong>
+              <pre style={{ whiteSpace: 'pre-wrap', backgroundColor: '#fff', padding: '10px', border: '1px solid #ddd', borderRadius: '4px' }}>
+                {agentResult.draftEmail}
+              </pre>
+            </div>
           </div>
         )}
       </div>
