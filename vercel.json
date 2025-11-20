@@ -12,17 +12,8 @@
       "config": { "distDir": "dist" }
     }
   ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/aos-service/server.js"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/client/$1"
-    }
-  ],
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api" }
+    { "source": "/api/(.*)", "destination": "/aos-service/server.js" },
+    { "source": "/(.*)", "destination": "/client/$1" }
   ]
 }
