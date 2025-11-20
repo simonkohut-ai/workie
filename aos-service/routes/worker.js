@@ -52,8 +52,9 @@ router.post('/config', authMiddleware, async (req, res) => {
     console.log(`[Config Route] Successfully saved config to ${docPath}`);
 
     // Schedule agent if schedule is provided
-    if (workerConfig.schedule && workerConfig.schedule !== 'Manual') {
-      await scheduleAgent(userId, workerConfig.schedule);
+    if (workerConfig.schedule && workerConfig.schedule !== 'Manual' && workerConfig.schedule !== 'manual') {
+      await scheduleAgent(userId, workerConfig.schedule, workerConfig);
+      console.log(`[Config Route] Successfully handed off scheduled task to scheduler service for user: ${userId}`);
     }
 
     // Trigger initial agent run
