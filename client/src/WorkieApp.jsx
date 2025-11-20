@@ -1,5 +1,35 @@
 import React, { useState } from 'react';
 
+// Placeholder for Billing Component
+const BillingComponent = () => {
+  const handleManageSubscription = async () => {
+    // In a real implementation, this would call a backend endpoint
+    // to create a Stripe Customer Portal session and redirect the user.
+    // Example: window.location.href = '/api/stripe/create-portal-session';
+    alert("Redirecting to Stripe Customer Portal... (Integration Pending)");
+  };
+
+  return (
+    <div style={{ marginTop: '20px', padding: '20px', border: '1px solid #eee', borderRadius: '8px' }}>
+      <h3>Billing & Subscription</h3>
+      <p>Manage your plan and view invoice history.</p>
+      <button 
+        onClick={handleManageSubscription}
+        style={{
+          padding: '10px 20px',
+          backgroundColor: '#6772e5', // Stripe blurple
+          color: 'white',
+          border: 'none',
+          borderRadius: '4px',
+          cursor: 'pointer'
+        }}
+      >
+        Manage Subscription
+      </button>
+    </div>
+  );
+};
+
 export default function WorkieApp() {
   const [status, setStatus] = useState('');
   const [loading, setLoading] = useState(false);
@@ -19,8 +49,6 @@ export default function WorkieApp() {
     };
 
     // Use relative path for Vercel deployment
-    // When running locally with separate ports, you might need a proxy or full URL
-    // But for Vercel, relative path /api/... maps to the serverless function
     const aosEndpoint = '/api/config';
 
     try {
@@ -53,7 +81,7 @@ export default function WorkieApp() {
       <h1>Workie Admin</h1>
       <p>Manage your Freelancer Admin Agent</p>
       
-      <div style={{ border: '1px solid #ccc', padding: '20px', borderRadius: '8px', maxWidth: '400px' }}>
+      <div style={{ border: '1px solid #ccc', padding: '20px', borderRadius: '8px', maxWidth: '400px', marginBottom: '20px' }}>
         <h2>Agent Configuration</h2>
         <p>Status: {loading ? 'Processing...' : 'Idle'}</p>
         
@@ -78,7 +106,8 @@ export default function WorkieApp() {
           </div>
         )}
       </div>
+
+      <BillingComponent />
     </div>
   );
 }
-
