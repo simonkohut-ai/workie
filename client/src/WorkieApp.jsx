@@ -323,7 +323,7 @@ Best regards,
             <p className="text-sm text-gray-500 mt-8 text-center">All plans include our commitment to Transparency: You only pay for the tokens you use.</p>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
