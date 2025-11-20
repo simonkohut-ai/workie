@@ -8,7 +8,7 @@ const workieAgent = require('../agents/WorkieAgent');
 const db = admin.firestore();
 
 // Helper function to trigger agent run
-async function triggerInitialAgentRun(workerConfig) {
+async function triggerInitialAgentRun(workerConfig, userId) {
   const mockTranscript = `Okay team, today's call summary. Sarah, you confirmed the client, Apex Corp, wants the new platform branding finalized by Friday, not Monday. Joe, your key action is to gather all Q3 reports and summarize the top five marketing failures by Wednesday noon. We decided the budget for Q4 is frozen at $15k, no exceptions. I will handle drafting the follow-up email to Apex Corp and confirming the scope change.`;
   
   console.log('[Config Route] Triggering initial agent run...');
@@ -16,7 +16,7 @@ async function triggerInitialAgentRun(workerConfig) {
   try {
     // We are using the singleton workieAgent. 
     // In a real scenario, we might configure it per user/config.
-    const result = await workieAgent.executeTask(mockTranscript);
+    const result = await workieAgent.executeTask(mockTranscript, userId);
     console.log('[Config Route] Initial agent run result:', JSON.stringify(result, null, 2));
   } catch (error) {
     console.error('[Config Route] Initial agent run failed:', error);
@@ -45,7 +45,7 @@ router.post('/config', authMiddleware, async (req, res) => {
     console.log(`[Config Route] Successfully saved config to ${docPath}`);
 
     // Trigger initial agent run
-    triggerInitialAgentRun(workerConfig); 
+    triggerInitialAgentRun(workerConfig, userId); 
 
     res.status(200).json({ message: 'Configuration saved successfully', path: docPath });
 

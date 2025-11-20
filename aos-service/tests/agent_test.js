@@ -10,7 +10,9 @@ async function runTest() {
       console.warn('WARNING: GOOGLE_API_KEY not set. Test may fail if not using a mock.');
     }
 
-    const result = await workieAgent.executeTask(mockTranscript);
+    // Use a mock user ID for testing usage tracking
+    const mockUserId = 'test-user-123';
+    const result = await workieAgent.executeTask(mockTranscript, mockUserId);
     
     console.log('Result:', JSON.stringify(result, null, 2));
 

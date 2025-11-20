@@ -1,5 +1,6 @@
 const { GoogleGenerativeAI, SchemaType } = require('@google/generative-ai');
 const dotenv = require('dotenv');
+const { recordUsage } = require('../utils/usage-tracker');
 
 dotenv.config();
 
@@ -16,11 +17,12 @@ class WorkieAgent {
 
   /**
    * Executes the Freelancer Admin workflow on a transcript.
-   * @param {string} transcriptText 
+   * @param {string} transcriptText
+   * @param {string} userId
    * @returns {Promise<Object>} JSON object with summary, actionItems, and draftEmail
    */
-  async executeTask(transcriptText) {
-    console.log('[WorkieAgent] Starting task execution...');
+  async executeTask(transcriptText, userId) {
+    console.log(`[WorkieAgent] Starting task execution for user: ${userId}...`);
     
     try {
       const model = this.genAI.getGenerativeModel({
@@ -59,11 +61,22 @@ ${transcriptText}
       const response = await result.response;
       const text = response.text();
       
+      let actualTokensUsed = 0;
       // Log usage if available
       if (response.usageMetadata) {
-          console.log(`[WorkieAgent] Token Usage - Prompt: ${response.usageMetadata.promptTokenCount}, Candidates: ${response.usageMetadata.candidatesTokenCount}, Total: ${response.usageMetadata.totalTokenCount}`);
+          actualTokensUsed = response.usageMetadata.totalTokenCount || 0;
+          console.log(`[WorkieAgent] Token Usage - Prompt: ${response.usageMetadata.promptTokenCount}, Candidates: ${response.usageMetadata.candidatesTokenCount}, Total: ${actualTokensUsed}`);
       } else {
-          console.log('[WorkieAgent] Token usage data not available in response metadata.');
+          // Fallback/Simulation if metadata is missing
+          actualTokensUsed = 100; 
+          console.log('[WorkieAgent] Token usage data not available in response metadata. Using placeholder: ' + actualTokensUsed);
+      }
+
+      // Record usage
+      if (userId) {
+        await recordUsage(userId, actualTokensUsed);
+      } else {
+        console.warn('[WorkieAgent] No userId provided, skipping usage recording.');
       }
 
       console.log('[WorkieAgent] Task execution completed successfully.');
