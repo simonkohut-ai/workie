@@ -33,10 +33,20 @@ const BillingComponent = () => {
 export default function WorkieApp() {
   const [status, setStatus] = useState('');
   const [loading, setLoading] = useState(false);
+  const [demoMode, setDemoMode] = useState(true); // Default to Demo Mode
 
   const saveConfiguration = async () => {
     setLoading(true);
-    setStatus('Saving...');
+    setStatus('Processing...');
+
+    if (demoMode) {
+        // SIMULATED BACKEND RESPONSE
+        setTimeout(() => {
+            setLoading(false);
+            setStatus('Success: Configuration saved. Agent output: Summary: 3 decisions made. Action Items: 2 tasks assigned. Email draft created.');
+        }, 2000);
+        return;
+    }
 
     // Configuration payload
     const workerConfig = {
@@ -83,6 +93,18 @@ export default function WorkieApp() {
       
       <div style={{ border: '1px solid #ccc', padding: '20px', borderRadius: '8px', maxWidth: '400px', marginBottom: '20px' }}>
         <h2>Agent Configuration</h2>
+        
+        <div style={{ marginBottom: '15px' }}>
+            <label>
+                <input 
+                    type="checkbox" 
+                    checked={demoMode} 
+                    onChange={(e) => setDemoMode(e.target.checked)} 
+                />
+                {' '}Enable Demo Mode (Bypass Backend)
+            </label>
+        </div>
+
         <p>Status: {loading ? 'Processing...' : 'Idle'}</p>
         
         <button 
