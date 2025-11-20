@@ -1,5 +1,6 @@
 const admin = require('../config/firebase-admin');
-const db = admin.firestore();
+// Removed synchronous top-level db initialization
+// const db = admin.firestore();
 
 // Placeholder App ID as per instructions
 const APP_ID = 'workie-app-id';
@@ -10,6 +11,9 @@ const APP_ID = 'workie-app-id';
  * @param {string} userId 
  */
 async function getUsage(userId) {
+  if (!admin.apps.length) throw new Error("Database not initialized");
+  
+  const db = admin.firestore();
   const docPath = `artifacts/${APP_ID}/users/${userId}/billing/usageTracker`;
   const docRef = db.doc(docPath);
   const doc = await docRef.get();
@@ -37,6 +41,9 @@ async function getUsage(userId) {
  * @returns {Promise<{isOverQuota: boolean}>}
  */
 async function recordUsage(userId, tokensUsed) {
+  if (!admin.apps.length) throw new Error("Database not initialized");
+
+  const db = admin.firestore();
   const docPath = `artifacts/${APP_ID}/users/${userId}/billing/usageTracker`;
   const docRef = db.doc(docPath);
 

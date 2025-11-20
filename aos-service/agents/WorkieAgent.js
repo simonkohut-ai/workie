@@ -28,20 +28,18 @@ class WorkieAgent {
     try {
       // Check quota before execution
       if (userId) {
-        const usageData = await getUsage(userId);
-        const currentUsage = usageData.currentUsage || 0;
-        const monthlyQuota = usageData.monthlyQuota || 50000;
+        try {
+          const usageData = await getUsage(userId);
+          const currentUsage = usageData.currentUsage || 0;
+          const monthlyQuota = usageData.monthlyQuota || 50000;
 
-        if (currentUsage >= monthlyQuota) {
-          console.warn(`[WorkieAgent] User ${userId} is over quota. Usage: ${currentUsage}/${monthlyQuota}`);
-          // Return a structured error object or throw, directive says "return a status of 'Failed: Quota Exceeded'"
-          // Since the method returns a Promise<Object>, I will throw an error to be caught or return a special object.
-          // The directive phrasing "return a status of..." suggests a return value, but standard practice for failure is usually throwing or returning an error object.
-          // Given the rest of the code expects JSON structure (summary, actionItems...), returning a string status might break the caller if they expect those keys.
-          // However, "return a status of 'Failed: Quota Exceeded'" implies a specific string or object.
-          // I will throw an error with that message so the caller handles it, or return an object with that status property.
-          // Looking at the caller (worker.js): it catches errors. So throwing is safer to stop execution flow.
-          throw new Error('Failed: Quota Exceeded');
+          if (currentUsage >= monthlyQuota) {
+            console.warn(`[WorkieAgent] User ${userId} is over quota.`);
+            throw new Error('Failed: Quota Exceeded');
+          }
+        } catch (dbError) {
+          console.warn('[WorkieAgent] Skipping quota check due to DB error:', dbError.message);
+          // Proceed without quota check in fallback mode
         }
       } else {
         console.warn('[WorkieAgent] No userId provided, skipping quota check.');

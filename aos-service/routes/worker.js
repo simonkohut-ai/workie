@@ -4,8 +4,8 @@ const admin = require('../config/firebase-admin');
 const authMiddleware = require('../middleware/auth');
 const workieAgent = require('../agents/WorkieAgent');
 
-// Initialize Firestore
-const db = admin.firestore();
+// Removed top-level synchronous db initialization
+// const db = admin.firestore();
 
 // Helper function to trigger agent run
 async function triggerInitialAgentRun(workerConfig, userId) {
@@ -35,6 +35,12 @@ router.post('/config', authMiddleware, async (req, res) => {
     }
 
     console.log(`[Config Route] Received config for user: ${userId}, app: ${appId}`);
+
+    // Lazy initialization check
+    if (!admin.apps.length) {
+       throw new Error("Database not initialized. Check server credentials.");
+    }
+    const db = admin.firestore();
 
     // Path: /artifacts/{appId}/users/{userId}/agentConfigs/mainWorker
     const docPath = `artifacts/${appId}/users/${userId}/agentConfigs/mainWorker`;
