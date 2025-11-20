@@ -162,7 +162,8 @@ Best regards,
 
                 <label className="block text-base font-semibold text-gray-200 mb-3">Input Data (Transcript or File)</label>
                 <div 
-                  className="flex flex-col items-center justify-center p-8 border-4 border-dashed border-gray-600 rounded-xl mb-8 cursor-pointer transition duration-200 hover:border-teal-500 hover:bg-gray-800/50"
+                  className="flex flex-col items-center justify-center p-8 border-4 border-dashed border-gray-600 rounded-xl mb-8 cursor-pointer transition duration-200 hover:border-teal-500"
+                  style={{ hover: { backgroundColor: 'rgba(31, 41, 55, 0.5)' } }}
                   onClick={() => document.getElementById('file-input').click()}
                 >
                   <svg className="h-10 w-10 text-teal-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
@@ -221,7 +222,7 @@ Best regards,
                   <h3 className="text-2xl font-bold text-white mb-4" style={{ fontFamily: 'Outfit, sans-serif' }}>Action Items (Ready to Delegate)</h3>
                   <div className="space-y-4">
                     {demoOutput.actionItems.map((item, idx) => (
-                      <div key={idx} className="flex items-start p-3 rounded-lg bg-gray-800 transition duration-150 hover:bg-gray-700/70 cursor-pointer">
+                      <div key={idx} className="flex items-start p-3 rounded-lg bg-gray-800 transition duration-150 hover:bg-gray-700 cursor-pointer">
                         <svg className="h-6 w-6 text-teal-400 mr-4 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                           <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                         </svg>
