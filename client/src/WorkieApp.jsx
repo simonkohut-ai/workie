@@ -31,6 +31,7 @@ export default function WorkieApp() {
   const [status, setStatus] = useState('');
   const [loading, setLoading] = useState(false);
   const [agentResult, setAgentResult] = useState(null);
+  const [schedule, setSchedule] = useState('');
 
   // Demo Mode Configuration
   const DEMO_MODE = true; 
@@ -44,6 +45,7 @@ export default function WorkieApp() {
     const workerConfig = {
       active: true,
       mode: 'auto',
+      schedule: schedule || 'Manual',
       settings: {
         tone: 'friendly',
         responseTime: 'immediate'
@@ -104,6 +106,29 @@ export default function WorkieApp() {
       <div style={{ border: '1px solid #ccc', padding: '20px', borderRadius: '8px', marginBottom: '20px' }}>
         <h2>Agent Configuration</h2>
         <p>Status: <strong>{loading ? 'Processing...' : (status || 'Idle')}</strong></p>
+        
+        <div style={{ marginBottom: '15px' }}>
+          <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
+            Schedule:
+          </label>
+          <select 
+            value={schedule}
+            onChange={(e) => setSchedule(e.target.value)}
+            style={{
+              width: '100%',
+              padding: '8px',
+              borderRadius: '4px',
+              border: '1px solid #ccc',
+              fontSize: '14px'
+            }}
+          >
+            <option value="">Manual (No Schedule)</option>
+            <option value="Every Monday at 9 AM">Every Monday at 9 AM</option>
+            <option value="Every Friday at 5 PM">Every Friday at 5 PM</option>
+            <option value="Daily at 8 AM">Daily at 8 AM</option>
+            <option value="Weekly on Wednesday at 2 PM">Weekly on Wednesday at 2 PM</option>
+          </select>
+        </div>
         
         <button 
           onClick={saveConfiguration}

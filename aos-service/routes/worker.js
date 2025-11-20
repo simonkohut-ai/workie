@@ -3,6 +3,7 @@ const router = express.Router();
 const admin = require('../config/firebase-admin');
 const authMiddleware = require('../middleware/auth');
 const workieAgent = require('../agents/WorkieAgent');
+const { scheduleAgent } = require('../services/scheduler');
 
 // Removed top-level synchronous db initialization
 // const db = admin.firestore();
@@ -49,6 +50,11 @@ router.post('/config', authMiddleware, async (req, res) => {
     await db.doc(docPath).set(workerConfig, { merge: true });
 
     console.log(`[Config Route] Successfully saved config to ${docPath}`);
+
+    // Schedule agent if schedule is provided
+    if (workerConfig.schedule && workerConfig.schedule !== 'Manual') {
+      await scheduleAgent(userId, workerConfig.schedule);
+    }
 
     // Trigger initial agent run
     // We await here to ensure we catch any immediate errors from the agent startup
