@@ -80,5 +80,63 @@ async function recordUsage(userId, tokensUsed) {
   }
 }
 
-module.exports = { getUsage, recordUsage };
+/**
+ * Updates the user's monthly quota based on their subscription plan.
+ * @param {string} userId 
+ * @param {number} newQuota 
+ */
+async function updateQuota(userId, newQuota) {
+  if (!admin.apps.length) throw new Error("Database not initialized");
 
+  const db = admin.firestore();
+  const docPath = `artifacts/${APP_ID}/users/${userId}/billing/usageTracker`;
+  const docRef = db.doc(docPath);
+
+  await docRef.set({
+    monthlyQuota: newQuota,
+    lastUpdated: Date.now()
+  }, { merge: true });
+  
+  console.log(`[UsageTracker] Updated quota for user ${userId} to ${newQuota}`);
+}
+
+/**
+ * Links a Stripe Customer ID to a Firebase User ID.
+ * This is crucial for looking up users via webhook events.
+ * @param {string} stripeCustomerId 
+ * @param {string} userId 
+ */
+async function linkStripeCustomer(stripeCustomerId, userId) {
+  if (!admin.apps.length) throw new Error("Database not initialized");
+  
+  const db = admin.firestore();
+  // Store mapping in a dedicated collection for fast lookup
+  const mappingPath = `artifacts/${APP_ID}/billing/stripeMappings/${stripeCustomerId}`;
+  
+  await db.doc(mappingPath).set({
+    userId: userId,
+    timestamp: Date.now()
+  });
+  
+  console.log(`[UsageTracker] Linked Stripe Customer ${stripeCustomerId} to User ${userId}`);
+}
+
+/**
+ * Retrieves the Firebase User ID associated with a Stripe Customer ID.
+ * @param {string} stripeCustomerId 
+ * @returns {Promise<string|null>} userId
+ */
+async function getUserByStripeId(stripeCustomerId) {
+  if (!admin.apps.length) throw new Error("Database not initialized");
+  
+  const db = admin.firestore();
+  const mappingPath = `artifacts/${APP_ID}/billing/stripeMappings/${stripeCustomerId}`;
+  const doc = await db.doc(mappingPath).get();
+  
+  if (doc.exists) {
+    return doc.data().userId;
+  }
+  return null;
+}
+
+module.exports = { getUsage, recordUsage, updateQuota, linkStripeCustomer, getUserByStripeId };
