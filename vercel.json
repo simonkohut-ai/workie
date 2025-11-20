@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "aos-service/server.js",
+      "use": "@vercel/node",
+      "config": { "includeFiles": ["aos-service/**"] }
+    },
+    {
+      "src": "client/package.json",
+      "use": "@vercel/static-build",
+      "config": { "distDir": "dist" }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/aos-service/server.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/client/$1"
+    }
+  ],
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api" }
+  ]
+}
