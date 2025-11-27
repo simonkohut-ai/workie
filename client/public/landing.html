@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workie.com - Dedicated AI Agent Service</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800;900&family=Inter:wght@400;500;600;700&display=swap');
+        
+        :root {
+            --color-primary: #34D399;
+            --color-secondary: #FBBF24;
+            --color-text-light: #f3f4f6;
+            --color-bg-dark: #0d1219;
+        }
+        body {
+            background-color: var(--color-bg-dark);
+            color: var(--color-text-light);
+            font-family: 'Inter', sans-serif;
+        }
+        h1, h2, h3 {
+            font-family: 'Outfit', sans-serif;
+        }
+        .bg-card {
+            background-color: #1a222e;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+        .cta-button {
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 4px 15px rgba(52, 211, 153, 0.4);
+        }
+        .cta-button:hover {
+            box-shadow: 0 6px 20px rgba(52, 211, 153, 0.6);
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <div class="max-w-7xl mx-auto px-6 py-16">
+        
+        <!-- Navigation -->
+        <nav class="flex justify-between items-center mb-24">
+            <div class="flex items-center">
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" class="mr-3">
+                    <path d="M16 32C7.16344 32 0 24.8366 0 16C0 7.16344 7.16344 0 16 0C24.8366 0 32 7.16344 32 16C32 24.8366 24.8366 32 16 32Z" fill="url(#paint0_linear)"/>
+                    <path d="M10.8286 21.1714L16 16L10.8286 10.8286L13.6571 8L21.1714 15.5143C21.9543 16.2971 21.9543 17.5543 21.1714 18.3371L13.6571 25.8514L10.8286 23.0229V21.1714Z" fill="white"/>
+                    <defs>
+                        <linearGradient id="paint0_linear" x1="16" y1="0" x2="16" y2="32" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#34D399" offset="0%"/>
+                            <stop offset="100%" stop-color="#22D3EE"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span class="text-2xl font-extrabold text-white">Workie.com</span>
+            </div>
+            <a href="#pricing" class="px-5 py-2 text-sm font-semibold rounded-lg text-gray-900 transition hover:bg-yellow-500" style="background-color: var(--color-secondary);">
+                View Plans
+            </a>
+        </nav>
+
+        <!-- HERO SECTION -->
+        <section class="text-center mb-32">
+            <h1 class="text-6xl md:text-8xl font-extrabold tracking-tight mb-8 text-white">
+                Stop Doing Admin. Start Delegating.
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-400 max-w-4xl mx-auto mb-12 font-medium">
+                Hire your dedicated AI Worker for less than your coffee budget. Effortless automation that never quits.
+            </p>
+            <a href="/" class="cta-button inline-block py-4 px-10 text-xl font-bold rounded-xl text-gray-900 hover:bg-teal-400" style="background-color: var(--color-primary);">
+                Join Closed Beta: Claim Your Spot
+            </a>
+        </section>
+
+        <!-- PROBLEM STATEMENT -->
+        <section class="mb-32">
+            <div class="text-center max-w-4xl mx-auto">
+                <span class="text-sm font-bold tracking-widest uppercase text-yellow-400 mb-3 block">The Real Cost of Work</span>
+                <h2 class="text-4xl md:text-5xl font-bold mb-8 text-white">
+                    40% of Your Time Is Unbillable Toil.
+                </h2>
+                <p class="text-lg text-gray-400 leading-relaxed">
+                    Freelancers, consultants, and micro-agencies spend nearly half their working hours on repetitive, low-value administrative tasks: summarizing meetings, chasing action items, and drafting routine follow-ups. This isn't just wasted time; it's lost revenue and guaranteed burnout.
+                </p>
+            </div>
+        </section>
+
+        <!-- SOLUTION SECTION -->
+        <section class="mb-32">
+            <div class="bg-card p-12 rounded-2xl border border-gray-800">
+                <h2 class="text-4xl font-bold text-white mb-12 text-center">
+                    The Workie Advantage
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-10 text-center">
+                    <div class="p-4">
+                        <span class="text-5xl mb-4 inline-block" style="color: var(--color-primary);">⏱️</span>
+                        <h3 class="text-xl font-bold mb-3">Persistence</h3>
+                        <p class="text-gray-400">Workie never quits. Agents maintain context, operate 24/7, and run recurring tasks on a strict schedule.</p>
+                    </div>
+                    <div class="p-4">
+                        <span class="text-5xl mb-4 inline-block" style="color: var(--color-primary);">🎯</span>
+                        <h3 class="text-xl font-bold mb-3">Precision</h3>
+                        <p class="text-gray-400">Powered by Gemini 2.5, Workie handles ambiguous instructions and complex reasoning better than rule-based automation.</p>
+                    </div>
+                    <div class="p-4">
+                        <span class="text-5xl mb-4 inline-block" style="color: var(--color-primary);">📈</span>
+                        <h3 class="text-xl font-bold mb-3">Scalability</h3>
+                        <p class="text-gray-400">Handle 10 clients or 100. Scale your operations without hiring or adding to your cognitive load.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- KILLER FEATURE -->
+        <section class="mb-32">
+            <h2 class="text-4xl md:text-5xl font-bold mb-12 text-center">
+                From Transcript to Draft Email in 30 Seconds
+            </h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h3 class="text-2xl font-bold mb-4 text-white">The Freelancer Admin Workflow</h3>
+                    <p class="text-lg text-gray-400 mb-8">
+                        Our MVP eliminates 45-60 minutes of post-meeting admin instantly. Just upload the raw transcript.
+                    </p>
+                    <div class="space-y-6">
+                        <div class="flex items-start bg-card p-4 rounded-lg border border-gray-700">
+                            <span class="text-2xl mr-4 font-bold" style="color: var(--color-secondary);">1.</span>
+                            <div>
+                                <p class="font-semibold text-lg">Key Decisions</p>
+                                <p class="text-gray-400 text-sm">Workie identifies and summarizes the 3 most important agreements or changes from the call.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start bg-card p-4 rounded-lg border border-gray-700">
+                            <span class="text-2xl mr-4 font-bold" style="color: var(--color-secondary);">2.</span>
+                            <div>
+                                <p class="font-semibold text-lg">Action Items</p>
+                                <p class="text-gray-400 text-sm">It extracts all specific 'Next Steps' and assigns them to Joe, Sarah, or you.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start bg-card p-4 rounded-lg border border-gray-700">
+                            <span class="text-2xl mr-4 font-bold" style="color: var(--color-secondary);">3.</span>
+                            <div>
+                                <p class="font-semibold text-lg">Draft Email</p>
+                                <p class="text-gray-400 text-sm">A professional, ready-to-send follow-up email is drafted, incorporating all data points.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gray-900 p-8 rounded-2xl border-2 border-teal-500/50 shadow-2xl">
+                    <h3 class="text-xl font-bold mb-4 text-teal-400">Simulated Output Preview</h3>
+                    <div class="space-y-4">
+                        <div class="bg-gray-800 p-3 rounded">
+                            <p class="font-medium text-sm mb-1 text-white">Summary of Decisions:</p>
+                            <ul class="text-sm text-gray-400 list-disc list-inside space-y-1">
+                                <li>Q4 rebrand approved.</li>
+                                <li>Deadline moved to Friday.</li>
+                            </ul>
+                        </div>
+                        <div class="bg-gray-800 p-3 rounded">
+                            <p class="font-medium text-sm mb-1 text-white">Action Items:</p>
+                            <ul class="text-sm text-gray-400 list-disc list-inside space-y-1">
+                                <li>Sarah: Finalize platform branding assets by Friday.</li>
+                                <li>Joe: Summarize Q3 marketing failures by Wednesday.</li>
+                            </ul>
+                        </div>
+                        <div class="bg-gray-800 p-3 rounded">
+                            <p class="font-medium text-sm mb-1 text-white">Draft Email Snippet:</p>
+                            <pre class="text-xs text-gray-300 italic whitespace-pre-wrap">Subject: Quick Recap: Apex Corp Design & Next Steps...
+
+Decisions Confirmed:
+1. Q4 rebrand design is approved.
+2. Deadline is Friday.
+
+Action Items:
+* Sarah: Finalize branding.
+* Joe: Submit Q3 summary.</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PRICING SECTION -->
+        <section id="pricing" class="mb-32">
+            <h2 class="text-4xl font-bold text-white mb-16 text-center">
+                Simple, Transparent Pricing
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <div class="bg-card p-8 rounded-xl border border-gray-700 hover:border-teal-500 transition duration-200 text-center">
+                    <h3 class="text-2xl font-bold mb-2">Micro</h3>
+                    <p class="text-sm text-gray-400 mb-4">Personal Use & Light Tasks</p>
+                    <p class="text-5xl font-extrabold mb-4 text-white">$4.99<span class="text-xl font-medium text-gray-400">/mo</span></p>
+                    <p class="text-lg font-semibold text-teal-400 mb-4">50,000 Tokens Included</p>
+                    <button class="w-full mt-6 py-3 font-bold rounded-lg text-gray-900 transition hover:bg-teal-400" style="background-color: var(--color-primary);">
+                        Start Micro Plan
+                    </button>
+                </div>
+
+                <div class="bg-card p-8 rounded-xl border-4 border-yellow-500 shadow-2xl transition duration-200 relative text-center">
+                    <span class="absolute top-0 right-0 bg-yellow-500 text-gray-900 text-xs font-bold px-4 py-1 rounded-bl-xl rounded-tr-xl">RECOMMENDED</span>
+                    <h3 class="text-2xl font-bold mb-2 text-yellow-400">Flow</h3>
+                    <p class="text-sm text-gray-400 mb-4">Active Freelancer & Teams</p>
+                    <p class="text-5xl font-extrabold mb-4 text-white">$14.99<span class="text-lg font-medium text-gray-400">/mo</span></p>
+                    <p class="text-lg font-semibold text-teal-400 mb-4">250,000 Tokens Included</p>
+                    <button class="w-full mt-6 py-3 font-bold rounded-lg text-gray-900 transition hover:bg-teal-400" style="background-color: var(--color-primary);">
+                        Upgrade to Flow
+                    </button>
+                </div>
+                
+                <div class="bg-card p-8 rounded-xl border border-gray-700 hover:border-teal-500 transition duration-200 text-center">
+                    <h3 class="text-2xl font-bold mb-2 text-white">Pro</h3>
+                    <p class="text-sm text-gray-400 mb-4">Agency & Heavy Automation</p>
+                    <p class="text-5xl font-extrabold mb-4 text-white">$39.99<span class="text-lg font-medium text-gray-400">/mo</span></p>
+                    <p class="text-lg font-semibold text-teal-400 mb-4">1,000,000 Tokens Included</p>
+                    <button class="w-full mt-6 py-3 font-bold rounded-lg text-gray-900 transition hover:bg-teal-400" style="background-color: var(--color-primary);">
+                        Go Pro
+                    </button>
+                </div>
+            </div>
+
+            <div class="max-w-4xl mx-auto mt-12 text-center p-6 bg-gray-900 rounded-xl border border-gray-700">
+                <p class="font-semibold text-lg mb-2 text-white">The Hybrid Model: Total Transparency</p>
+                <p class="text-gray-400 text-sm">
+                    All plans include a generous token quota. If you exceed your limit, you can instantly purchase Token Top-Ups ($3.00/100K Tokens). You only pay for the AI usage you actually consume.
+                </p>
+            </div>
+        </section>
+
+        <!-- FOOTER & CTA -->
+        <section id="beta-join" class="py-16 border-t border-gray-800 text-center">
+            <h2 class="text-3xl font-bold mb-6 text-white">
+                Ready to Stop Admin Toil?
+            </h2>
+            <a href="/" class="cta-button inline-block py-4 px-12 text-2xl font-bold rounded-xl text-gray-900 hover:bg-teal-400" style="background-color: var(--color-primary);">
+                Join the Closed Beta Today
+            </a>
+            
+            <div class="mt-16 text-sm text-gray-500 space-x-6">
+                <a href="#pricing" class="hover:text-white transition">Pricing</a>
+                <a href="#" class="hover:text-white transition">Terms of Service</a>
+                <a href="#" class="hover:text-white transition">Privacy Policy</a>
+            </div>
+            <p class="mt-4 text-xs text-gray-600">&copy; 2025 Workie.com. Built by Professionals, for Professionals.</p>
+        </section>
+
+    </div>
+</body>
+</html>
+
