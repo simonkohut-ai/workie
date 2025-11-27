@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workie Chat Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800&family=Inter:wght@400;500;600&display=swap');
+        
+        :root {
+            --color-primary: #34D399;
+            --color-secondary: #FBBF24;
+            --color-bg-dark: #0d1219;
+            --color-chat-user: #22354e;
+            --color-chat-agent: #1a222e;
+        }
+        body {
+            background-color: var(--color-bg-dark);
+            color: #f3f4f6;
+            font-family: 'Inter', sans-serif;
+        }
+        h1, h2, h3 {
+            font-family: 'Outfit', sans-serif;
+        }
+        .chat-bubble {
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+        }
+        .agent-avatar {
+            background-color: var(--color-primary);
+            color: #0d1219;
+            font-family: 'Outfit', sans-serif;
+        }
+        .user-input-area {
+            background-color: #1a222e;
+            border-top: 1px solid #2e2e2e;
+        }
+        .custom-scroll::-webkit-scrollbar {
+            width: 8px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background-color: #3f4756;
+            border-radius: 4px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: #1f2937;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <div class="max-w-7xl mx-auto p-4 sm:p-6">
+        
+        <!-- Header -->
+        <header class="flex justify-between items-center pb-4 border-b border-gray-700">
+            <h1 class="text-3xl font-extrabold text-white">Workie: Agent Chat</h1>
+            <div onclick="showModal()" class="cursor-pointer px-4 py-2 text-sm font-bold rounded-lg transition text-gray-900 hover:bg-yellow-500" style="background-color: var(--color-secondary);">
+                Manage Subscription
+            </div>
+        </header>
+
+        <!-- Main Chat Area -->
+        <div class="grid grid-cols-1 lg:grid-cols-4 mt-4 h-[calc(100vh-100px)]">
+
+            <!-- Left Sidebar -->
+            <div class="lg:col-span-1 bg-gray-900 p-4 rounded-xl shadow-inner border border-gray-800 custom-scroll overflow-y-auto mb-4 lg:mb-0 lg:mr-4">
+                <h2 class="text-xl font-bold mb-4 border-b border-gray-700 pb-2 text-teal-400">Agent Status</h2>
+                
+                <div class="space-y-4">
+                    <p class="text-sm font-medium">Agent Name: <span class="text-white">Freelancer Admin</span></p>
+                    <p class="text-sm font-medium">Status: <span id="status-display" class="text-green-400 font-bold">Online / Ready</span></p>
+                    <p class="text-sm font-medium">Scheduled: <span id="current-schedule" class="text-gray-400">Manual (Run on Demand)</span></p>
+                    
+                    <div class="pt-2 border-t border-gray-800">
+                        <p class="text-sm font-medium text-gray-400 mb-1">Tokens Remaining</p>
+                        <div class="w-full bg-gray-700 rounded-full h-2">
+                            <div id="progress-bar" class="h-2 rounded-full" style="width: 82%; background-color: var(--color-primary);"></div>
+                        </div>
+                        <span class="text-xs text-gray-400 mt-1 block">45,123 / 250,000 used</span>
+                    </div>
+
+                    <div class="pt-2 border-t border-gray-800">
+                        <h3 class="text-lg font-bold mb-2 text-teal-400">Worker Role</h3>
+                        <p id="current-role" class="text-xs text-gray-400 italic bg-gray-800 p-2 rounded">
+                            Act as a meticulous project manager. When I upload a transcript, extract all decisions and action items.
+                        </p>
+                        <button onclick="editRole()" class="mt-2 w-full py-1 text-xs font-bold rounded-lg text-gray-900" style="background-color: var(--color-primary);">
+                            Edit Role & Schedule
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Window -->
+            <div class="lg:col-span-3 bg-gray-900 rounded-xl shadow-2xl flex flex-col border border-gray-800">
+                
+                <div id="chat-history" class="p-4 flex-grow custom-scroll overflow-y-auto space-y-4">
+                    <!-- Initial Greeting -->
+                    <div class="flex items-start">
+                        <div class="agent-avatar w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm mr-3 mt-1">W</div>
+                        <div class="bg-gray-800 p-3 chat-bubble max-w-lg">
+                            <p class="font-bold text-sm text-yellow-400 mb-1">Workie Agent Alpha</p>
+                            <p class="text-sm">Welcome back! I am your Freelancer Admin Agent. Paste your meeting transcript here, and I'll handle the rest.</p>
+                        </div>
+                    </div>
+                    
+                    <div id="latest-output"></div>
+                </div>
+
+                <!-- Input Area -->
+                <form id="chat-form" class="user-input-area p-4 rounded-b-xl flex items-center space-x-3">
+                    <input type="file" id="transcript-file" class="hidden" accept=".txt,.srt,.vtt">
+                    
+                    <button type="button" onclick="document.getElementById('transcript-file').click()" class="p-2 rounded-full text-gray-400 hover:text-teal-400 transition" title="Upload Transcript">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                        </svg>
+                    </button>
+
+                    <input type="text" id="chat-input" placeholder="Type your instruction or paste transcript here..." class="flex-grow p-3 bg-gray-800 border border-gray-700 rounded-lg text-sm text-white focus:outline-none focus:border-teal-500" required>
+                    
+                    <button type="submit" class="p-3 rounded-lg text-gray-900 font-bold hover:bg-teal-400 transition" style="background-color: var(--color-primary);">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                    </button>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div id="pricing-modal" class="fixed inset-0 bg-gray-900 bg-opacity-90 hidden items-center justify-center z-50">
+        <div class="bg-gray-900 w-full max-w-md rounded-xl shadow-3xl p-8 border border-gray-700">
+            <h3 class="text-xl font-bold text-yellow-400 mb-4">Pricing & Plans</h3>
+            <p class="text-sm text-gray-400 mb-4">Flow Tier: $14.99/mo (250k Tokens)</p>
+            <button onclick="hideModal()" class="mt-4 py-2 px-4 rounded-lg text-gray-900 font-bold" style="background-color: var(--color-primary);">Close</button>
+        </div>
+    </div>
+
+    <script>
+        const demoOutput = {
+            summary: "Client approved the Q4 rebrand design layout. Q4 marketing budget is frozen at $15k, no exceptions. Deadline moved to Friday.",
+            actionItems: [
+                "Sarah: Finalize platform branding assets by Friday.",
+                "Joe: Gather Q3 reports and summarize failures by Wednesday noon.",
+                "You: Draft follow-up email to Apex Corp."
+            ],
+            draftEmail: `Subject: Quick Recap: Apex Corp Design & Next Steps
+
+Hi Apex Team,
+
+Following our sync call, confirming key points:
+
+Decisions:
+1. Q4 rebrand design approved
+2. Deadline moved to Friday
+3. Budget frozen at $15,000
+
+Action Items:
+* Sarah: Finalize branding by Friday
+* Joe: Submit Q3 summary by Wednesday
+
+Best regards,
+[Your Name]`,
+            tokensUsed: 5123
+        };
+
+        const chatHistory = document.getElementById('chat-history');
+        const chatForm = document.getElementById('chat-form');
+        const chatInput = document.getElementById('chat-input');
+        const latestOutput = document.getElementById('latest-output');
+        const statusDisplay = document.getElementById('status-display');
+
+        function renderUserBubble(text) {
+            const bubble = document.createElement('div');
+            bubble.className = 'flex justify-end';
+            bubble.innerHTML = `<div class="bg-blue-600 p-3 chat-bubble max-w-lg text-sm">${text}</div>`;
+            chatHistory.appendChild(bubble);
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        }
+
+        function renderAgentOutput(output, isTyping = false) {
+            const outputHTML = `
+                <div class="flex items-start">
+                    <div class="agent-avatar w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm mr-3 mt-1">W</div>
+                    <div class="bg-gray-800 p-3 chat-bubble max-w-2xl text-sm ${isTyping ? 'animate-pulse' : ''}">
+                        <p class="font-bold text-sm text-yellow-400 mb-2">Workie Agent</p>
+                        ${isTyping ? `<div class="text-gray-400 italic">Processing task...</div>` : `
+                            <div class="space-y-4">
+                                <div class="p-3 rounded-lg border border-gray-700 bg-gray-700/50">
+                                    <p class="text-xs font-semibold text-teal-400 mb-1">Key Decisions</p>
+                                    <p>${output.summary}</p>
+                                </div>
+                                <div class="p-3 rounded-lg border border-gray-700 bg-gray-700/50">
+                                    <p class="text-xs font-semibold text-teal-400 mb-1">Action Items</p>
+                                    <ul class="list-none space-y-1">
+                                        ${output.actionItems.map(item => `
+                                            <li class="flex items-center text-gray-300">
+                                                <svg class="h-4 w-4 text-yellow-400 mr-2 shrink-0" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
+                                                ${item}
+                                            </li>`).join('')}
+                                    </ul>
+                                </div>
+                                <div class="p-3 rounded-lg border border-gray-700 bg-gray-700/50">
+                                    <p class="text-xs font-semibold text-teal-400 mb-1">Draft Email</p>
+                                    <pre class="text-xs text-gray-400 whitespace-pre-wrap">${output.draftEmail}</pre>
+                                </div>
+                                <p class="text-xs text-gray-500 pt-2 border-t border-gray-700">Tokens: ${output.tokensUsed.toLocaleString()} | Completed</p>
+                            </div>
+                        `}
+                    </div>
+                </div>
+            `;
+            
+            if (isTyping) {
+                latestOutput.innerHTML = outputHTML;
+            } else {
+                latestOutput.innerHTML = '';
+                const div = document.createElement('div');
+                div.innerHTML = outputHTML;
+                chatHistory.appendChild(div.firstChild);
+                chatHistory.scrollTop = chatHistory.scrollHeight;
+            }
+        }
+
+        chatForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const prompt = chatInput.value.trim();
+            const file = document.getElementById('transcript-file').files[0];
+            
+            let userMessage = prompt;
+            if (file) {
+                userMessage = `(File: ${file.name}) ${prompt || 'Process this file.'}`;
+            } else if (!prompt) {
+                return;
+            }
+
+            renderUserBubble(userMessage);
+            chatInput.value = '';
+            document.getElementById('transcript-file').value = '';
+            
+            statusDisplay.textContent = 'Processing...';
+            statusDisplay.classList.remove('text-green-400');
+            statusDisplay.classList.add('text-yellow-400');
+            
+            renderAgentOutput({}, true);
+
+            setTimeout(() => {
+                renderAgentOutput(demoOutput, false);
+                statusDisplay.textContent = 'Online / Ready';
+                statusDisplay.classList.remove('text-yellow-400');
+                statusDisplay.classList.add('text-green-400');
+            }, 4000);
+        });
+
+        window.showModal = function() {
+            document.getElementById('pricing-modal').classList.remove('hidden');
+            document.getElementById('pricing-modal').classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+
+        window.hideModal = function() {
+            document.getElementById('pricing-modal').classList.add('hidden');
+            document.getElementById('pricing-modal').classList.remove('flex');
+            document.body.style.overflow = '';
+        }
+
+        window.editRole = function() {
+            alert('Role editing feature (coming soon)');
+        }
+    </script>
+</body>
+</html>
+
